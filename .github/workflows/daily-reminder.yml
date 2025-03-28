@@ -2,7 +2,7 @@ name: Daily Reminder Commit
 
 on:
   schedule:
-    - cron: "30 10 * * *"  # every day at 10:30 UTC
+    - cron: "30 10 * * *"
   workflow_dispatch:
 
 jobs:
@@ -12,21 +12,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.PAT_TOKEN }}  # <<< THIS is crucial!
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Run the bot
+      - name: Run reminder bot
         run: python reminder_bot.py
 
-      - name: Commit and push changes
+      - name: Commit and push changes using PAT
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git config user.name "reminder-bot"
-          git config user.email "bot@example.com"
+          git config --global user.name "reminder-bot"
+          git config --global user.email "bot@example.com"
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
           git add .
           git commit -m "Daily reminder update" || echo "No changes to commit"
-          git push
+          git push origin HEAD:main
