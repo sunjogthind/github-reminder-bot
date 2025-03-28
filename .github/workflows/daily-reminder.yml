@@ -8,8 +8,6 @@ on:
 jobs:
   run-reminder:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout code
@@ -24,11 +22,13 @@ jobs:
         run: python reminder_bot.py
 
       - name: Commit and push changes
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+      
         run: |
           git config --global user.name "reminder-bot"
           git config --global user.email "bot@example.com"
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
           git add .
-          git commit -m "Daily reminder update"
+          git commit -m "Daily reminder update" || echo "Nothing to commit"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
