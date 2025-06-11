@@ -324,3 +324,7 @@ The bot will write reminders here every day. :) 2025-03-28 - Reminder:
 - ✅ Do 1 Leetcode problem
 - ✅ Work on your project
 
+2025-06-11 - Reminder:
+- ✅ Do 1 Leetcode problem
+- ✅ Work on your project
+
